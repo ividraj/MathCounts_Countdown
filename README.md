@@ -1,6 +1,6 @@
 # MathCounts Ladder MVP
 
-A simple, kid-friendly tournament tracker for a 10-person MathCounts-style head-to-head ladder.
+A simple, kid-friendly tournament tracker for a 10 to 16-person MathCounts-style head-to-head ladder.
 
 ## What it does
 - Takes 10 to 16 competitor names (default template starts with 16 lines).
