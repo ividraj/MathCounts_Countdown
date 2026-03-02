@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MathCounts Ladder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1>MathCounts Countdown Tournament</h1>
+        <p class="subtitle">Head-to-head rounds</p>
+      </header>
+
+      <section id="setupPanel" class="card">
+        <h2>Enter Competitors</h2>
+        <p class="hint">Add 10 to 16 names (one per line). Default starts with 16 so you can quickly delete extra rows.</p>
+        <textarea id="namesInput" rows="16" aria-label="Competitor names"></textarea>
+        <div class="actions">
+          <button id="fillSampleBtn" class="btn btn-secondary">Use Sample Names</button>
+          <button id="startBtn" class="btn btn-primary">Start Tournament</button>
+        </div>
+        <p id="setupError" class="error" role="alert"></p>
+      </section>
+
+      <section id="shufflePanel" class="card hidden">
+        <h2>Shuffling...</h2>
+        <p class="hint">Randomizing who starts first 🎲</p>
+        <div id="shuffleNames" class="shuffle-box"></div>
+      </section>
+
+      <section id="matchPanel" class="card hidden">
+        <div class="row-between">
+          <h2>Live Match</h2>
+          <span id="targetBadge" class="badge"></span>
+        </div>
+
+        <div id="winnerBanner" class="winner-banner hidden" role="status"></div>
+
+        <div class="match-grid">
+          <div class="player-card left">
+            <div id="leftAvatar" class="avatar">🐾</div>
+            <h3 id="leftName">Left</h3>
+            <div id="leftScore" class="score">0</div>
+            <button id="leftPointBtn" class="btn btn-score">+1 Left</button>
+          </div>
+
+          <div class="versus">VS</div>
+
+          <div class="player-card right">
+            <div id="rightAvatar" class="avatar">🐾</div>
+            <h3 id="rightName">Right</h3>
+            <div id="rightScore" class="score">0</div>
+            <button id="rightPointBtn" class="btn btn-score">+1 Right</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="undoBtn" class="btn btn-secondary">Undo Last Point</button>
+          <button id="resetMatchBtn" class="btn btn-secondary">Reset Current Match</button>
+          <button id="newTournamentBtn" class="btn btn-danger">New Tournament</button>
+        </div>
+
+        <div class="meta-row">
+          <p id="progressText" class="hint"></p>
+          <p id="nextText" class="hint"></p>
+        </div>
+      </section>
+
+      <section id="resultsPanel" class="card hidden">
+        <h2>Final Rankings 🏆</h2>
+        <ol id="finalRanking" class="ranking-list"></ol>
+        <div class="actions">
+          <button id="restartBtn" class="btn btn-primary">Run Another Tournament</button>
+        </div>
+      </section>
+
+      <section id="ladderPanel" class="card hidden">
+        <h2>Competition Lists</h2>
+        <div class="queue-layout">
+          <div>
+            <h3>Winning / Placements</h3>
+            <ul id="winningList" class="status-list"></ul>
+          </div>
+          <div>
+            <h3>Not Competed Yet</h3>
+            <ul id="notCompetedList" class="status-list"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <canvas id="confettiCanvas" class="confetti"></canvas>
+    <script src="app.js"></script>
+  </body>
+</html>

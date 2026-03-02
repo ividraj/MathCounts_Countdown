@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MathCounts Demo Reel</title>
+    <style>
+      :root {
+        --bg: #f6f8ff;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #5f6b7a;
+        --primary: #2563eb;
+        --accent: #f59e0b;
+        --success: #15803d;
+        --border: #e5e7eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at top right, #e6efff, var(--bg));
+      }
+
+      .demo {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .subtitle {
+        color: var(--muted);
+      }
+
+      .reel {
+        margin-top: 12px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--card);
+        box-shadow: 0 12px 24px rgba(31, 41, 55, 0.1);
+        overflow: hidden;
+      }
+
+      .scene {
+        display: none;
+        padding: 16px;
+        min-height: 560px;
+      }
+
+      .scene.active {
+        display: block;
+        animation: fadeIn 260ms ease;
+      }
+
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .badge {
+        background: #eef2ff;
+        color: #3730a3;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .grid {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        background: #fbfcff;
+      }
+
+      .list {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+        display: grid;
+        gap: 6px;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 7px 9px;
+        background: #fff;
+      }
+
+      .item.deck {
+        border-color: var(--accent);
+        background: #fff7ed;
+      }
+
+      .item.up {
+        border-color: var(--primary);
+        background: #eff6ff;
+      }
+
+      .item.win {
+        border-color: #22c55e;
+        background: #f0fdf4;
+      }
+
+      .small {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .match {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .player {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        background: #f8fbff;
+      }
+
+      .avatar {
+        font-size: 34px;
+      }
+
+      .score {
+        margin: 6px 0;
+        font-size: 56px;
+        font-weight: 800;
+      }
+
+      .score-btn {
+        margin-top: 4px;
+        border: none;
+        border-radius: 10px;
+        padding: 9px 12px;
+        width: 100%;
+        background: var(--accent);
+        color: #111827;
+        font-weight: 800;
+      }
+
+      .score-btn.pulse {
+        animation: pulse 220ms ease;
+      }
+
+      .vs {
+        font-weight: 800;
+        color: var(--muted);
+      }
+
+      .winner {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #ecfdf5;
+        color: var(--success);
+        font-weight: 800;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-top: 1px solid var(--border);
+        background: #f8faff;
+      }
+
+      .pill {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid var(--border);
+        font-size: 13px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(2px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        from {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.04);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .match {
+          grid-template-columns: 1fr;
+        }
+
+        .vs {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="demo">
+      <header class="header">
+        <h1>MathCounts App Demo (GIF-style)</h1>
+        <p class="subtitle">Auto-looping walkthrough with randomized mixed boys/girls competitor names</p>
+      </header>
+
+      <section class="reel">
+        <article class="scene active" id="scene0">
+          <div class="top">
+            <h2>Step 1: Meet Competitors</h2>
+            <span class="badge">Intro Hold</span>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h3>Winning / Placements</h3>
+              <ul class="list"><li class="item"><span>No winners yet</span><span class="small">First round</span></li></ul>
+            </div>
+            <div class="card">
+              <h3>Not Competed Yet</h3>
+              <ul class="list" id="listHold"></ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="scene" id="scene1">
+          <div class="top">
+            <h2>Step 2: Casino Shuffle</h2>
+            <span class="badge">Spinning</span>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h3>Winning / Placements</h3>
+              <ul class="list"><li class="item"><span>No winners yet</span><span class="small">First round</span></li></ul>
+            </div>
+            <div class="card">
+              <h3>Not Competed Yet</h3>
+              <ul class="list" id="listSpin"></ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="scene" id="scene2">
+          <div class="top">
+            <h2>Step 3: Announce First Pair</h2>
+            <span class="badge">Up First</span>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h3>Winning / Placements</h3>
+              <ul class="list"><li class="item"><span>No winners yet</span><span class="small">First round</span></li></ul>
+            </div>
+            <div class="card">
+              <h3>Not Competed Yet</h3>
+              <ul class="list" id="listFirstPair"></ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="scene" id="scene3">
+          <div class="top">
+            <h2>Step 4: Live Match</h2>
+            <span class="badge">Main Round: first to 3</span>
+          </div>
+          <div class="match">
+            <div class="player">
+              <div class="avatar" id="leftAvatar">🐾</div>
+              <h3 id="leftName">Left</h3>
+              <div class="score" id="leftScore">0</div>
+              <button class="score-btn" id="leftPointBtnDemo" type="button">+1 Left</button>
+              <div class="small">Left Seat</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="player">
+              <div class="avatar" id="rightAvatar">🐾</div>
+              <h3 id="rightName">Right</h3>
+              <div class="score" id="rightScore">0</div>
+              <button class="score-btn" id="rightPointBtnDemo" type="button">+1 Right</button>
+              <div class="small">Right Seat</div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h3>Winning / Placements</h3>
+              <ul class="list" id="listWinnersLive"></ul>
+            </div>
+            <div class="card">
+              <h3>Not Competed Yet</h3>
+              <ul class="list" id="listQueueLive"></ul>
+            </div>
+          </div>
+          <div class="winner" id="winnerBanner">🏆 Winner takes the seat!</div>
+        </article>
+
+        <div class="footer">
+          <span class="pill" id="statusText">Preparing demo...</span>
+          <button class="pill" id="rerollBtn" type="button">Reroll 10 Names</button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const maleNames = ["Liam", "Noah", "Ethan", "Mason", "Lucas", "Aiden", "Owen", "Elijah", "Henry", "Caleb"];
+      const femaleNames = ["Emma", "Olivia", "Sophia", "Ava", "Mia", "Amelia", "Harper", "Ella", "Nora", "Chloe"];
+      const emojis = ["🐼", "🦊", "🐯", "🐨", "🐰", "🦁", "🐸", "🦄", "🐶", "🐱"];
+
+      const scenes = [
+        document.getElementById("scene0"),
+        document.getElementById("scene1"),
+        document.getElementById("scene2"),
+        document.getElementById("scene3"),
+      ];
+
+      const listHold = document.getElementById("listHold");
+      const listSpin = document.getElementById("listSpin");
+      const listFirstPair = document.getElementById("listFirstPair");
+      const listWinnersLive = document.getElementById("listWinnersLive");
+      const listQueueLive = document.getElementById("listQueueLive");
+
+      const leftAvatar = document.getElementById("leftAvatar");
+      const rightAvatar = document.getElementById("rightAvatar");
+      const leftName = document.getElementById("leftName");
+      const rightName = document.getElementById("rightName");
+      const leftScore = document.getElementById("leftScore");
+      const rightScore = document.getElementById("rightScore");
+      const leftPointBtnDemo = document.getElementById("leftPointBtnDemo");
+      const rightPointBtnDemo = document.getElementById("rightPointBtnDemo");
+      const winnerBanner = document.getElementById("winnerBanner");
+      const statusText = document.getElementById("statusText");
+      const rerollBtn = document.getElementById("rerollBtn");
+
+      let competitors = [];
+      let timers = [];
+      let spinInterval = null;
+
+      function clearAllTimers() {
+        timers.forEach((timer) => clearTimeout(timer));
+        timers = [];
+        if (spinInterval) clearInterval(spinInterval);
+      }
+
+      function shuffle(items) {
+        const copy = [...items];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function pickFiveUnique(pool) {
+        return shuffle(pool).slice(0, 5);
+      }
+
+      function generateCompetitors() {
+        const boys = pickFiveUnique(maleNames);
+        const girls = pickFiveUnique(femaleNames);
+        const mixed = shuffle([...boys, ...girls]);
+        const assignedEmojis = shuffle(emojis);
+        competitors = mixed.map((name, index) => ({
+          id: index + 1,
+          name,
+          emoji: assignedEmojis[index],
+        }));
+      }
+
+      function itemHtml(competitor, label, extraClass = "") {
+        return `<li class="item ${extraClass}"><span>${competitor.emoji} ${competitor.name}</span><span class="small">${label}</span></li>`;
+      }
+
+      function showScene(index) {
+        scenes.forEach((scene, i) => scene.classList.toggle("active", i === index));
+      }
+
+      function renderHold() {
+        listHold.innerHTML = competitors.map((c) => itemHtml(c, "Waiting")).join("");
+      }
+
+      function renderSpin(order) {
+        listSpin.innerHTML = order.map((c) => itemHtml(c, "Shuffling")).join("");
+      }
+
+      function renderFirstPair(order) {
+        listFirstPair.innerHTML = order
+          .map((c, i) => itemHtml(c, i < 2 ? "Up First" : "Waiting", i < 2 ? "up" : ""))
+          .join("");
+      }
+
+      function renderLive(order, onComplete) {
+        const competitorsById = new Map(order.map((competitor) => [competitor.id, competitor]));
+        let left = order[0];
+        let right = order[1];
+        let queue = order.slice(2);
+        let nextPlacement = 10;
+        const placements = [];
+        const wins = {};
+
+        function setSeatUi() {
+          leftAvatar.textContent = left.emoji;
+          rightAvatar.textContent = right.emoji;
+          leftName.textContent = `${left.emoji} ${left.name}`;
+          rightName.textContent = `${right.emoji} ${right.name}`;
+        }
+
+        function renderColumns() {
+          const placedIds = new Set(placements.map((entry) => entry.competitor.id));
+          const winnerEntries = Object.entries(wins)
+            .map(([id, count]) => ({ competitor: competitorsById.get(Number(id)), count }))
+            .filter((entry) => entry.competitor && !placedIds.has(entry.competitor.id))
+            .sort((a, b) => b.count - a.count);
+
+          listWinnersLive.innerHTML = "";
+          winnerEntries.forEach((entry) => {
+            const seat = entry.competitor.id === left.id ? " • Left Seat" : entry.competitor.id === right.id ? " • Right Seat" : "";
+            listWinnersLive.innerHTML += itemHtml(entry.competitor, `Still competing${seat}`, "win");
+          });
+
+          placements
+            .sort((a, b) => a.rank - b.rank)
+            .forEach((entry) => {
+              listWinnersLive.innerHTML += itemHtml(entry.competitor, `Placed #${entry.rank}`);
+            });
+
+          if (listWinnersLive.innerHTML === "") {
+            listWinnersLive.innerHTML = `<li class="item"><span>No winners yet</span><span class="small">Round starting</span></li>`;
+          }
+
+          listQueueLive.innerHTML = queue
+            .map((competitor, index) => itemHtml(competitor, index === 0 ? "On Deck" : "Waiting", index === 0 ? "deck" : ""))
+            .join("");
+
+          if (queue.length === 0) {
+            listQueueLive.innerHTML = `<li class="item"><span>No one waiting</span><span class="small">Final match state</span></li>`;
+          }
+        }
+
+        function pulseButton(button) {
+          button.classList.remove("pulse");
+          void button.offsetWidth;
+          button.classList.add("pulse");
+        }
+
+        function addPoint(side, scoreState) {
+          if (side === "left") {
+            scoreState.left += 1;
+            leftScore.textContent = String(scoreState.left);
+            pulseButton(leftPointBtnDemo);
+          } else {
+            scoreState.right += 1;
+            rightScore.textContent = String(scoreState.right);
+            pulseButton(rightPointBtnDemo);
+          }
+        }
+
+        function animatePattern(pattern, scoreState, done) {
+          let stepIndex = 0;
+          function runStep() {
+            if (stepIndex >= pattern.length) {
+              done();
+              return;
+            }
+            addPoint(pattern[stepIndex], scoreState);
+            stepIndex += 1;
+            timers.push(setTimeout(runStep, 560));
+          }
+          runStep();
+        }
+
+        function settleMatch(winnerSide, scoreState) {
+          const winner = winnerSide === "left" ? left : right;
+          const loser = winnerSide === "left" ? right : left;
+
+          placements.push({ rank: nextPlacement, competitor: loser });
+          nextPlacement -= 1;
+          wins[winner.id] = (wins[winner.id] ?? 0) + 1;
+
+          winnerBanner.textContent = `🏆 ${winner.emoji} ${winner.name} wins and stays! ${loser.emoji} ${loser.name} goes to placement #${nextPlacement + 1}.`;
+
+          if (queue.length > 0) {
+            const incoming = queue.shift();
+            if (winnerSide === "left") {
+              right = incoming;
+            } else {
+              left = incoming;
+            }
+          }
+
+          scoreState.left = 0;
+          scoreState.right = 0;
+          leftScore.textContent = "0";
+          rightScore.textContent = "0";
+          setSeatUi();
+          renderColumns();
+        }
+
+        function runMatchSequence(matchIndex, patterns) {
+          if (matchIndex >= patterns.length) {
+            statusText.textContent = "Demo loop complete. Restarting...";
+            timers.push(
+              setTimeout(() => {
+                onComplete();
+              }, 2200)
+            );
+            return;
+          }
+
+          const pattern = patterns[matchIndex];
+          const scoreState = { left: 0, right: 0 };
+          statusText.textContent = `Step 4/4: Live competition (match ${matchIndex + 1} of ${patterns.length})`;
+
+          animatePattern(pattern, scoreState, () => {
+            const winnerSide = scoreState.left >= 3 ? "left" : "right";
+            settleMatch(winnerSide, scoreState);
+            timers.push(
+              setTimeout(() => {
+                runMatchSequence(matchIndex + 1, patterns);
+              }, 1200)
+            );
+          });
+        }
+
+        setSeatUi();
+        leftScore.textContent = "0";
+        rightScore.textContent = "0";
+        winnerBanner.textContent = "🏁 Match sequence starting...";
+        renderColumns();
+
+        const patterns = [
+          ["left", "right", "left", "left"],
+          ["right", "left", "right", "right"],
+          ["left", "left", "left"],
+        ];
+
+        runMatchSequence(0, patterns);
+      }
+
+      function runDemo() {
+        clearAllTimers();
+        generateCompetitors();
+
+        statusText.textContent = "Step 1/4: Hold list of 10 competitors";
+        showScene(0);
+        renderHold();
+
+        timers.push(
+          setTimeout(() => {
+            statusText.textContent = "Step 2/4: Casino-style spinning";
+            showScene(1);
+            let spinOrder = [...competitors];
+            renderSpin(spinOrder);
+
+            spinInterval = setInterval(() => {
+              spinOrder = shuffle(spinOrder);
+              renderSpin(spinOrder);
+            }, 140);
+
+            timers.push(
+              setTimeout(() => {
+                clearInterval(spinInterval);
+                const finalOrder = shuffle(competitors);
+                statusText.textContent = "Step 3/4: Pause for announcers";
+                showScene(2);
+                renderFirstPair(finalOrder);
+
+                timers.push(
+                  setTimeout(() => {
+                    statusText.textContent = "Step 4/4: Move first pair to competition";
+                    showScene(3);
+                    renderLive(finalOrder, runDemo);
+                  }, 2400)
+                );
+              }, 2600)
+            );
+          }, 2200)
+        );
+      }
+
+      rerollBtn.addEventListener("click", runDemo);
+      runDemo();
+    </script>
+  </body>
+</html>
